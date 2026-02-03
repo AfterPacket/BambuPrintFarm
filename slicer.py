@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 import os
@@ -81,6 +81,9 @@ def _default_paths() -> Tuple[List[str], List[str]]:
             "/usr/local/bin/orca-slicer",
             os.path.expanduser("~/.local/bin/OrcaSlicer"),
             os.path.expanduser("~/OrcaSlicer.AppImage"),
+            # Flatpak export (if installed)
+            "/var/lib/flatpak/exports/bin/com.orcaslicer.OrcaSlicer",
+            os.path.expanduser("~/.local/share/flatpak/exports/bin/com.orcaslicer.OrcaSlicer"),
         ]
         bambu += [
             "/usr/bin/bambu-studio",

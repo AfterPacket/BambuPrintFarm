@@ -1,4 +1,4 @@
-import os
+﻿import os
 import secrets
 import shutil
 import subprocess
@@ -31,7 +31,9 @@ CONNECT_ON_START = os.getenv("CONNECT_ON_START", "1") != "0"
 BASE_DIR = Path(__file__).resolve().parent
 
 READY_EXTS = (".gcode", ".gcode.3mf")
-SLICABLE_EXTS = (".stl", ".3mf")
+# Files that *may* be slicable if an external slicer CLI is configured.
+# Keep this list conservative; "auto-slice" is best-effort and depends on the slicer.
+SLICABLE_EXTS = (".stl", ".obj", ".3mf")
 PLATE_GCODE_RE = re.compile(r"^Metadata[\\/]plate_\d+\.gcode$", re.IGNORECASE)
 
 
@@ -171,9 +173,13 @@ def validate_upload_file(file: UploadFile) -> dict:
         return {"presliced_3mf": True}
     if slicer_config.enabled and is_slicable_file(filename):
         return {"presliced_3mf": False}
+    slicable = ", ".join(SLICABLE_EXTS)
     raise HTTPException(
         status_code=400,
-        detail="Unsupported file type. Upload .gcode, .gcode.3mf, or a sliced .3mf.",
+        detail=(
+            "Unsupported file type. Upload .gcode, .gcode.3mf, or a sliced .3mf. "
+            f"If auto-slice is enabled, supported model uploads are: {slicable}."
+        ),
     )
 
 

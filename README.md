@@ -59,6 +59,8 @@ External tools:
 Required slicers (only if auto-slicing is enabled):
 - OrcaSlicer CLI **2.3.1+** (must support `--slice` and `--export-3mf`; `--allow-newer-file` is used by default).
 - Bambu Studio CLI (must support project slicing to a Bambu-style `.gcode.3mf` container; version not pinned).
+- Raspberry Pi / ARM64: auto-slicing requires a slicer build for your architecture (`aarch64`). If you do not have an
+  ARM64-compatible slicer CLI, you must pre-slice on another machine and upload `.gcode` / `.gcode.3mf` instead.
 
 Hardware/network prerequisites:
 - Printer must be reachable on the same LAN (stable Wi-Fi/Ethernet required).
@@ -236,6 +238,11 @@ If streaming stalls, use snapshot mode. Camera reliability depends on `ffmpeg`, 
 ### Slicer Configuration (Auto-Slice)
 
 Auto-slicing is optional and disabled by default.
+
+Scope and limitations (non-negotiable):
+- This project does not implement slicing. It shells out to an external slicer CLI.
+- Only a limited set of model formats are accepted for auto-slice (`.stl`, `.obj`, and project `.3mf`).
+- Project `.3mf` compatibility depends on slicer version. Newer project versions may be rejected by older slicers.
 
 1. Provide a slicer executable:
 - Put OrcaSlicer/Bambu Studio CLI in one of the supported locations (see `tools/README.md`), or
