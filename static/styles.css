@@ -168,7 +168,7 @@ body {
 
 .camera-card {
     width: 100%;
-    max-width: 900px;
+    max-width: 1400px;
     border-radius: 14px;
     overflow: hidden;
     border: 1px solid var(--line);
@@ -183,7 +183,7 @@ body {
 
 .camera-feed {
     width: 100%;
-    height: clamp(320px, 55vh, 640px);
+    height: clamp(420px, 68vh, 820px);
     background: #121212;
 }
 
