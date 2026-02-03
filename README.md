@@ -213,6 +213,10 @@ If you do not want authentication:
 If you do want authentication:
 - Set `DASH_USER` and `DASH_PASS` to non-default values.
 
+### Docker Compose Example (With Password)
+
+If you want an authentication prompt, start from `docker-compose.example.yml` (it includes the `environment:` block with correct indentation).
+
 ### Start the Server
 
 ```powershell

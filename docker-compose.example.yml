@@ -1,4 +1,4 @@
-﻿version: "3.8"
+version: "3.8"
 
 services:
   bambu-dashboard:
@@ -6,9 +6,8 @@ services:
     container_name: bambu_dashboard
     restart: unless-stopped
     network_mode: "host"
-    # Optional HTTP Basic auth. Uncomment and change if you want a login prompt.
-    # environment:
-    #   DASH_USER: "admin"
-    #   DASH_PASS: "change-me"
+    environment:
+      DASH_USER: "admin"
+      DASH_PASS: "change-me"
     volumes:
       - ./config.json:/app/config.json:ro
