@@ -1,0 +1,10 @@
+config.json
+jobs/
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+.idea/
+.vscode/
+.DS_Store

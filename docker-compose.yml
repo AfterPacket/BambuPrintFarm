@@ -1,0 +1,15 @@
+﻿version: "3.8"
+
+services:
+  bambu-dashboard:
+    build: .
+    container_name: bambu_dashboard
+    restart: unless-stopped
+    network_mode: "host"
+    # Optional HTTP Basic auth. If you set these, you must change them.
+    # If omitted/empty, auth is disabled.
+    # environment:
+    #   DASH_USER: "admin"
+    #   DASH_PASS: "change-me"
+    volumes:
+      - ./config.json:/app/config.json:ro

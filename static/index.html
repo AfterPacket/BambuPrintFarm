@@ -1,0 +1,404 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Bambu Print Farm</title>
+        <link rel="stylesheet" href="/static/styles.css" />
+    </head>
+    <body>
+        <main class="app">
+            <header class="topbar">
+                <div class="brand">
+                    <h1>Bambu Print Farm</h1>
+                    <p>Multi-Printer Control</p>
+                </div>
+                <div class="picker">
+                    <label for="printerSelect">Active Printer</label>
+                    <select id="printerSelect"></select>
+                </div>
+            </header>
+
+            <nav class="tabs">
+                <button class="tab active" data-tab="control">Control</button>
+                <button class="tab" data-tab="overview">Overview</button>
+                <button class="tab" data-tab="jobs">Jobs</button>
+            </nav>
+
+            <section class="tab-panel active" id="tab-control">
+                <div class="control-layout">
+                    <aside class="panel">
+                        <h2>Status</h2>
+                        <div class="stat">
+                            <span class="label">State</span
+                            ><span id="printerState">–</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">Progress</span
+                            ><span id="progress">–</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">Bed</span
+                            ><span id="bedTemp">–</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">Nozzle</span
+                            ><span id="nozzleTemp">–</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">Light</span
+                            ><span id="lightState">–</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">Filament</span
+                            ><span id="selectedAms">–</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">ETA</span
+                            ><span id="remainingTime">–</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">Last Error</span
+                            ><span id="lastError">–</span>
+                        </div>
+                    </aside>
+
+                    <section class="camera-stage">
+                        <div class="camera-header">
+                            <h2>Camera</h2>
+                            <label class="check">
+                                <input
+                                    id="cameraSnapshotMode"
+                                    type="checkbox"
+                                />
+                                Snapshot mode
+                            </label>
+                        </div>
+                        <div id="cameraMsg" class="notice"></div>
+                        <div
+                            id="cameraGrid"
+                            class="camera-grid camera-center"
+                        ></div>
+                    </section>
+
+                    <aside class="panel">
+                        <h2>Controls</h2>
+                        <div class="btnrow">
+                            <button id="pauseBtn">Pause</button>
+                            <button id="resumeBtn">Resume</button>
+                            <button id="stopBtn" class="danger">Stop</button>
+                            <button id="clearFaultBtn" class="danger">
+                                Clear Fault
+                            </button>
+                        </div>
+                        <div class="btnrow">
+                            <button id="chamberOnBtn">Chamber On</button>
+                            <button id="chamberOffBtn">Chamber Off</button>
+                        </div>
+                        <div class="notice" id="controlMsg"></div>
+
+                        <h3>Temps</h3>
+                        <div class="formrow">
+                            <label for="bedInput">Bed Target</label>
+                            <input
+                                id="bedInput"
+                                type="number"
+                                min="0"
+                                max="120"
+                                placeholder="e.g. 60"
+                            />
+                        </div>
+                        <div class="formrow">
+                            <label for="nozzleInput">Nozzle Target</label>
+                            <input
+                                id="nozzleInput"
+                                type="number"
+                                min="0"
+                                max="320"
+                                placeholder="e.g. 220"
+                            />
+                        </div>
+                        <div class="btnrow">
+                            <button id="setTempsBtn" class="primary">
+                                Set Temps
+                            </button>
+                            <button id="cooldownBtn">Cool Down</button>
+                        </div>
+                        <div class="notice" id="tempMsg"></div>
+
+                        <h3>Fans</h3>
+                        <div class="fan-controls">
+                            <div class="fan-row">
+                                <label for="partFan">Part</label>
+                                <input
+                                    id="partFan"
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value="0"
+                                />
+                                <span id="partFanVal" class="muted">0%</span>
+                            </div>
+                            <div class="fan-row">
+                                <label for="auxFan">Aux</label>
+                                <input
+                                    id="auxFan"
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value="0"
+                                />
+                                <span id="auxFanVal" class="muted">0%</span>
+                            </div>
+                            <div class="fan-row">
+                                <label for="chamberFan">Chamber</label>
+                                <input
+                                    id="chamberFan"
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value="0"
+                                />
+                                <span id="chamberFanVal" class="muted">0%</span>
+                            </div>
+                        </div>
+                        <div class="btnrow">
+                            <button id="applyFansBtn" class="primary">
+                                Apply Fans
+                            </button>
+                            <button id="fansOffBtn">Fans Off</button>
+                        </div>
+                        <div class="notice" id="fanMsg"></div>
+
+                        <h3>AMS</h3>
+                        <div id="amsStatus" class="notice"></div>
+                        <div id="amsList" class="ams-list"></div>
+
+                        <h3>Jog</h3>
+                        <div class="jog">
+                            <div class="jog-row">
+                                <button id="jogYPlus">Y+</button>
+                            </div>
+                            <div class="jog-row">
+                                <button id="jogXMinus">X-</button>
+                                <button id="jogHome">Home</button>
+                                <button id="jogXPlus">X+</button>
+                            </div>
+                            <div class="jog-row">
+                                <button id="jogYMinus">Y-</button>
+                            </div>
+                            <div class="jog-row">
+                                <button id="jogZPlus">Z+</button>
+                                <button id="jogZMinus">Z-</button>
+                            </div>
+                            <div class="jog-row">
+                                <label>Step</label>
+                                <select id="jogStep">
+                                    <option value="1">1mm</option>
+                                    <option value="5" selected>5mm</option>
+                                    <option value="10">10mm</option>
+                                </select>
+                                <label>Feed</label>
+                                <select id="jogFeed">
+                                    <option value="1200">1200</option>
+                                    <option value="3000" selected>3000</option>
+                                    <option value="6000">6000</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="notice" id="jogMsg"></div>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="tab-panel" id="tab-overview">
+                <div class="overview-layout">
+                    <div class="card">
+                        <h2>Farm Overview</h2>
+                        <table class="table" id="farmTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>State</th>
+                                    <th>Progress</th>
+                                    <th>Bed</th>
+                                    <th>Nozzle</th>
+                                    <th>ETA</th>
+                                    <th>Conn</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="card">
+                        <h2>Fleet Controls</h2>
+                        <div class="btnrow">
+                            <button id="pauseAllBtn">Pause All</button>
+                            <button id="resumeAllBtn">Resume All</button>
+                            <button id="stopAllBtn" class="danger">
+                                Stop All
+                            </button>
+                        </div>
+                        <div class="btnrow">
+                            <button id="chamberAllOnBtn">
+                                Chamber Light On
+                            </button>
+                            <button id="chamberAllOffBtn">
+                                Chamber Light Off
+                            </button>
+                        </div>
+                        <div id="fleetMsg" class="notice"></div>
+
+                        <h3>Fleet Fans</h3>
+                        <div class="fan-controls">
+                            <div class="fan-row">
+                                <label for="fleetPartFan">Part</label>
+                                <input
+                                    id="fleetPartFan"
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value="0"
+                                />
+                                <span id="fleetPartFanVal" class="muted"
+                                    >0%</span
+                                >
+                            </div>
+                            <div class="fan-row">
+                                <label for="fleetAuxFan">Aux</label>
+                                <input
+                                    id="fleetAuxFan"
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value="0"
+                                />
+                                <span id="fleetAuxFanVal" class="muted"
+                                    >0%</span
+                                >
+                            </div>
+                            <div class="fan-row">
+                                <label for="fleetChamberFan">Chamber</label>
+                                <input
+                                    id="fleetChamberFan"
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value="0"
+                                />
+                                <span id="fleetChamberFanVal" class="muted"
+                                    >0%</span
+                                >
+                            </div>
+                        </div>
+                        <div class="btnrow">
+                            <button id="fleetApplyFansBtn" class="primary">
+                                Apply Fleet Fans
+                            </button>
+                            <button id="fleetFansOffBtn">Fleet Fans Off</button>
+                        </div>
+                        <div id="fleetFanMsg" class="notice"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tab-panel" id="tab-jobs">
+                <div class="jobs-layout">
+                    <div class="card">
+                        <h2>Upload & Start</h2>
+                        <input
+                            id="fileInput"
+                            type="file"
+                            accept=".gcode,.gcode.3mf,.stl,.3mf"
+                        />
+                        <div class="formrow">
+                            <label>Plate</label>
+                            <input
+                                id="plateInput"
+                                type="number"
+                                min="1"
+                                max="16"
+                                value="1"
+                            />
+                        </div>
+                        <button id="uploadBtn">Upload</button>
+                        <button id="uploadStartBtn" class="primary">
+                            Upload & Start
+                        </button>
+                        <div id="uploadMsg" class="muted"></div>
+                        <div class="muted">
+                            STL / project 3MF auto-slice if enabled.
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Job Queue</h2>
+                        <div class="muted">
+                            STL / project 3MF auto-slice if enabled.
+                        </div>
+                        <div class="queue-row">
+                            <input
+                                id="queueFileInput"
+                                type="file"
+                                accept=".gcode,.gcode.3mf,.stl,.3mf"
+                            />
+                            <input
+                                id="queuePlateInput"
+                                type="number"
+                                min="1"
+                                max="16"
+                                value="1"
+                            />
+                            <label class="check">
+                                <input
+                                    id="autoAssignInput"
+                                    type="checkbox"
+                                    checked
+                                />
+                                Auto assign
+                            </label>
+                            <button id="enqueueBtn" class="primary">
+                                Enqueue
+                            </button>
+                            <button id="dispatchNowBtn">Dispatch Now</button>
+                        </div>
+                        <div id="queueMsg" class="notice"></div>
+                        <div id="dispatchStatus" class="muted"></div>
+                        <table class="table" id="jobTable">
+                            <thead>
+                                <tr>
+                                    <th>Job</th>
+                                    <th>File</th>
+                                    <th>Status</th>
+                                    <th>Target</th>
+                                    <th>Assigned</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="footer">
+            <div class="footer-inner">
+                <span>Built with 🩶 by</span>
+                <a href="https://lassiter.eu" target="_blank" rel="noreferrer"
+                    >Lassiter</a
+                >
+                <span class="footer-sep">•</span>
+                <a
+                    href="https://github.com/afterpacket"
+                    target="_blank"
+                    rel="noreferrer"
+                    >afterpacket</a
+                >
+                <span class="footer-sep">•</span>
+                <span>GPL-3.0</span>
+            </div>
+        </footer>
+
+        <script src="/static/app.js"></script>
+    </body>
+</html>

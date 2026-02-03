@@ -1,0 +1,37 @@
+{
+  "poll_interval_sec": 2.0,
+  "dispatch_interval_sec": 3.0,
+  "slicer": {
+    "enabled": false,
+    "preferred": "auto",
+    "command_args": [
+      "{exe}",
+      "--allow-newer-file",
+      "1",
+      "--no-check",
+      "--slice",
+      "0",
+      "--export-3mf",
+      "{output}",
+      "{input}"
+    ],
+    "orca_paths": [],
+    "bambu_paths": [],
+    "max_wait_sec": 600
+  },
+  "printers": [
+    {
+      "id": "printer-01",
+      "name": "My Printer",
+      "printer_ip": "192.168.1.100",
+      "serial": "SERIAL_HERE",
+      "access_code": "ACCESS_CODE_HERE",
+      "camera_enabled": true,
+      "camera_protocol": "rtsps",
+      "camera_port": 322,
+      "camera_path": "/streaming/live/1",
+      "camera_user": "bblp",
+      "camera_url": ""
+    }
+  ]
+}
