@@ -1,4 +1,4 @@
-:root {
+﻿:root {
     --bg: #050a14;
     --ink: #e8f2ff;
     --muted: #89a3c7;
@@ -41,6 +41,16 @@ body {
     display: grid;
     grid-template-rows: 1fr auto;
     overflow: hidden;
+}
+
+/* Mobile browsers have a dynamic address bar; 100vh can be taller than the
+   visible viewport, which can push the footer off-screen while scrolling is
+   disabled. Prefer dynamic viewport units when available. */
+@supports (height: 100dvh) {
+    body {
+        height: 100dvh;
+        min-height: 100dvh;
+    }
 }
 
 .app {
@@ -373,6 +383,7 @@ input[type="range"]::-moz-range-thumb {
     padding: 0.8rem 2rem 1rem;
     color: var(--muted);
     background: rgba(5, 10, 20, 0.9);
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
 }
 
 .footer-inner {
