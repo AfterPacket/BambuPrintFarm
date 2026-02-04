@@ -195,8 +195,9 @@ async function refreshSelectedStatus() {
     if (clearFaultBtnEl) clearFaultBtnEl.disabled = s !== "FAILED";
 
     // Jogging while printing can cause collisions and toolhead damage. Keep the
-    // UI locked unless the printer is clearly idle.
-    const canJog = s === "IDLE" || s === "FINISH";
+    // UI locked unless the printer is available. This allows "soft FAILED"
+    // states (FAILED/CANCELLED) while still blocking any busy/printing state.
+    const canJog = data.available === true;
     [
       "jogYPlus",
       "jogYMinus",
