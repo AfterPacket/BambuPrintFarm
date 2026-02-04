@@ -1,4 +1,4 @@
-const stateEl = document.getElementById("printerState");
+﻿const stateEl = document.getElementById("printerState");
 const progressEl = document.getElementById("progress");
 const bedEl = document.getElementById("bedTemp");
 const nozzleEl = document.getElementById("nozzleTemp");
@@ -804,8 +804,10 @@ if (jogYPlus) jogYPlus.onclick = () => jog(0, 1, 0);
 if (jogYMinus) jogYMinus.onclick = () => jog(0, -1, 0);
 if (jogXPlus) jogXPlus.onclick = () => jog(1, 0, 0);
 if (jogXMinus) jogXMinus.onclick = () => jog(-1, 0, 0);
-if (jogZPlus) jogZPlus.onclick = () => jog(0, 0, 1);
-if (jogZMinus) jogZMinus.onclick = () => jog(0, 0, -1);
+// Bambu bed kinematics make "Z up/down" unintuitive; map the UI to the physical expectation:
+// Z+ raises the nozzle away from the bed, Z- lowers it closer to the bed.
+if (jogZPlus) jogZPlus.onclick = () => jog(0, 0, -1);
+if (jogZMinus) jogZMinus.onclick = () => jog(0, 0, 1);
 if (jogHome)
   jogHome.onclick = async () => {
     try {
